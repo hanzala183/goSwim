@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>goSwim - Find Swimming Pools Near You</title>
+    <!-- Add Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="/">goSwim</a>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="active">Home</a>
+                <a href="#about-section" class="nav-link">About</a>
+                <a href="#contact-section" class="nav-link">Contact</a>
+                <a href="#account">Account</a>
+            </div>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="search-container">
+            <h1>Find Your Perfect Swimming Pool</h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search by location or pool name...">
+                <button onclick="searchPools()">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="content-grid">
+            <div class="pools-list">
+                <div class="pools-header">
+                    <h2 id="poolsHeading"></h2>
+                    <button class="weather-btn" onclick="showWeather()" style="display: none;">
+                        <i class="fas fa-cloud-sun"></i> Weather
+                    </button>
+                </div>
+                <div id="poolList"></div>
+            </div>
+            <div class="water-quality-guidelines">
+                <h3>Water Quality Guidelines</h3>
+                <div class="guideline-item">
+                    <h4>Temperature</h4>
+                    <p>Safe Range: 24-30°C<br>
+                    Recommended: 26-28°C</p>
+                </div>
+                <div class="guideline-item">
+                    <h4>pH Level</h4>
+                    <p>Safe Range: 6.8-7.8<br>
+                    Recommended: 7.2-7.6</p>
+                </div>
+                <div class="guideline-item">
+                    <h4>Chlorine</h4>
+                    <p>Safe Range: 1.0-2.0 ppm<br>
+                    Recommended: 1.2-1.8 ppm</p>
+                </div>
+                <div class="guideline-item">
+                    <h4>Why These Matter?</h4>
+                    <p>• Temperature affects comfort and safety<br>
+                    • pH balance prevents skin irritation<br>
+                    • Chlorine keeps water clean and safe</p>
+                </div>
+            </div>
+        </div>
+        <div class="map-section">
+            <h2>Swimming Pools Map</h2>
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section" id="about-section">
+                <h3>About</h3>
+                <p>GoSwim is your trusted platform for finding swimming pools and monitoring water quality in real-time.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#about-section">About</a></li>
+                    <li><a href="#contact-section">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section" id="contact-section">
+                <h3>Contact</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-phone"></i> +1 234 567 890</li>
+                    <li><i class="fas fa-envelope"></i> info@goswim.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Hyderabad, India</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 GoSwim. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="poolDetails" class="pool-details-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="poolDetailsContent"></div>
+        </div>
+    </div>
+
+    <!-- Add Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <script src="app.js"></script>
+</body>
+</html> 
