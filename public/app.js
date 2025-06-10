@@ -811,4 +811,102 @@ window.addEventListener('scroll', function() {
 document.querySelector('.mobile-menu').addEventListener('click', function() {
     const navLinks = document.querySelector('.nav-links');
     navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-}); 
+});
+
+// Weather functionality
+let weatherUpdateInterval;
+
+async function showWeather() {
+    try {
+        const location = await getCurrentLocation();
+        const weatherModal = document.getElementById('weatherModal');
+        const weatherContent = document.getElementById('weatherContent');
+        
+        // Show loading state
+        weatherContent.innerHTML = '<div class="loading">Loading weather data...</div>';
+        weatherModal.style.display = 'block';
+        
+        // Initial weather fetch
+        await updateWeatherData(location);
+        
+        // Set up interval for live updates (every 5 minutes)
+        weatherUpdateInterval = setInterval(async () => {
+            await updateWeatherData(location);
+        }, 300000); // 5 minutes in milliseconds
+        
+        // Add close button functionality
+        const closeBtn = weatherModal.querySelector('.close');
+        closeBtn.onclick = function() {
+            weatherModal.style.display = 'none';
+            clearInterval(weatherUpdateInterval); // Clear interval when modal is closed
+        };
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == weatherModal) {
+                weatherModal.style.display = 'none';
+                clearInterval(weatherUpdateInterval); // Clear interval when modal is closed
+            }
+        };
+    } catch (error) {
+        console.error('Error fetching weather:', error);
+        const weatherContent = document.getElementById('weatherContent');
+        weatherContent.innerHTML = `
+            <div class="error-message">
+                <p>Error loading weather data. Please try again.</p>
+                <button onclick="showWeather()">Retry</button>
+            </div>
+        `;
+    }
+}
+
+async function updateWeatherData(location) {
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&units=metric&appid=21073ec5e62aee1754c24af954c0da54`);
+        const data = await response.json();
+        
+        const weatherContent = document.getElementById('weatherContent');
+        weatherContent.innerHTML = `
+            <h2>Current Weather in ${location.city}</h2>
+            <div class="weather-info">
+                <div class="weather-main">
+                    <div class="weather-icon-container">
+                        <i class="fas ${getWeatherIcon(data.weather[0].main)} weather-icon"></i>
+                        <div class="cloud-animation"></div>
+                    </div>
+                    <div class="temperature">${Math.round(data.main.temp)}°C</div>
+                </div>
+                <div class="weather-details">
+                    <p class="description">${data.weather[0].description}</p>
+                    <p class="humidity">Humidity: ${data.main.humidity}%</p>
+                    <p class="wind">Wind: ${Math.round(data.wind.speed)} m/s</p>
+                    <p class="last-updated">Last updated: ${new Date().toLocaleTimeString()}</p>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        console.error('Error updating weather:', error);
+    }
+}
+
+function getWeatherIcon(weatherMain) {
+    const icons = {
+        'Clear': 'fa-sun',
+        'Clouds': 'fa-cloud',
+        'Rain': 'fa-cloud-rain',
+        'Drizzle': 'fa-cloud-rain',
+        'Thunderstorm': 'fa-bolt',
+        'Snow': 'fa-snowflake',
+        'Mist': 'fa-smog',
+        'Smoke': 'fa-smog',
+        'Haze': 'fa-smog',
+        'Dust': 'fa-smog',
+        'Fog': 'fa-smog',
+        'Sand': 'fa-smog',
+        'Ash': 'fa-smog',
+        'Squall': 'fa-wind',
+        'Tornado': 'fa-wind'
+    };
+    
+    return icons[weatherMain] || 'fa-cloud-sun';
+} 
